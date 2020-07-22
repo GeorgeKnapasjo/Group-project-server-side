@@ -14,8 +14,8 @@ chai.use(chaiHttp);
 
 
 
-describe('/GET projects', () => {
-    it("should return all projects", (done) => {
+describe('/GET all projects', () => {
+    it("should return approved projects", (done) => {
         chai.request(server)
             .get('/projects/approved')
             .end((err, res) => {
@@ -26,42 +26,191 @@ describe('/GET projects', () => {
     })
 })
 
-// describe('/POST', () => {
-//     it('it should return status 201', (done) => {
-//         let application = { name: "Annette", description: "finish this project", postcode: 2000 };
-//         chai.request(server)
-//             .post('/projects/submissions')
-//             .send(application)
-//             .end((err, res) => {
-//                 res.should.have.status(200);
-//                 assert.isNotNaN(res.body.postcode, 'postcode is not NaN')
-//                 expect(res.body.name).to.not.equal('')
-//                 expect(res.body.description).to.not.equal('')
-//                 expect(res.body.postcode).to.be.gt(1999)
-//                 expect(res.body.postcode).to.be.lt(3000)
-//                 // expect(res.body.postcode).to.be.within(1999, 3000)
-//                 done()
-//             })
-//     })
-// })
+describe('/POST', () => {
+    it('it should return status 201', (done) => {
+        let application = { name: "Annette", title: "Project completion", description: "finish this project", postcode: 2000 };
+        chai.request(server)
+            .post('/projects/submissions')
+            .send(application)
+            .end((err, res) => {
+                res.should.have.status(200);
+                done()
 
-// describe('/test POST METHOD',()=>{
-//     it("it should not do the post if we don't have postcode",(done)=>{
-//         let project={
-//             name:"mariam",
-//             title:"project 3",
-//             description:" dapibus augue imperdiet.",
-//             postcode:1502
-//         }
+            })
+    })
+})
+describe('/POST', () => {
+    it('it should return status 500 if post code is below 2000', (done) => {
+        let application = { name: "Annette", title: "Project completion", description: "finish this project", postcode: 1000 };
+        chai.request(server)
+            .post('/projects/submissions')
+            .send(application)
+            .end((err, res) => {
+                res.body.should.have.status(500);
+                done()
 
-//         chai.request(server)
-//         .post("/projects/submissions")
-//         .send(project)
-//         .end((err,res)=>{
-//             console.log(res)
-//             console.log(res.status)
-//             res.should.have.status(500);
-//             done();
-//         });
-//     });
-// })
+            })
+    })
+})
+describe('/POST', () => {
+    it('it should return status 500 if post code is above 2999', (done) => {
+        let application = { name: "Annette", title: "Project completion", description: "finish this project", postcode: 3000 };
+        chai.request(server)
+            .post('/projects/submissions')
+            .send(application)
+            .end((err, res) => {
+                res.body.should.have.status(500);
+                done()
+
+            })
+    })
+})
+describe('/POST', () => {
+    it('it should return status 500 if post code is blank', (done) => {
+        let application = { name: "Annette", title: "Project completion", description: "finish this project", postcode: '' };
+        chai.request(server)
+            .post('/projects/submissions')
+            .send(application)
+            .end((err, res) => {
+                res.body.should.have.status(500);
+                done()
+
+            })
+    })
+})
+describe('/POST', () => {
+    it('it should return status 500 if post code is a string', (done) => {
+        let application = { name: "Annette", title: "Project completion", description: "finish this project", postcode: '2000' };
+        chai.request(server)
+            .post('/projects/submissions')
+            .send(application)
+            .end((err, res) => {
+                res.body.should.have.status(500);
+                done()
+
+            })
+    })
+})
+describe('/POST', () => {
+    it('it should return status 500 if name is blank', (done) => {
+        let application = { name: "", title: "Project completion", description: "finish this project", postcode: '2000' };
+        chai.request(server)
+            .post('/projects/submissions')
+            .send(application)
+            .end((err, res) => {
+                res.body.should.have.status(500);
+                done()
+
+            })
+    })
+})
+describe('/POST', () => {
+    it('it should return status 500 if name is not a string', (done) => {
+        let application = { name: 132, title: "Project completion", description: "finish this project", postcode: '2000' };
+        chai.request(server)
+            .post('/projects/submissions')
+            .send(application)
+            .end((err, res) => {
+                res.body.should.have.status(500);
+                done()
+
+            })
+    })
+})
+describe('/POST', () => {
+    it('it should return status 500 if title is not a string', (done) => {
+        let application = { name: "Annette", title: 123, description: "finish this project", postcode: '2000' };
+        chai.request(server)
+            .post('/projects/submissions')
+            .send(application)
+            .end((err, res) => {
+                res.body.should.have.status(500);
+                done()
+
+            })
+    })
+})
+describe('/POST', () => {
+    it('it should return status 500 if title is blank', (done) => {
+        let application = { name: "Annette", title: "", description: "finish this project", postcode: '2000' };
+        chai.request(server)
+            .post('/projects/submissions')
+            .send(application)
+            .end((err, res) => {
+                res.body.should.have.status(500);
+                done()
+
+            })
+    })
+})
+describe('/POST', () => {
+    it('it should return status 500 if description is blank', (done) => {
+        let application = { name: "Annette", title: "Project completion", description: "", postcode: '2000' };
+        chai.request(server)
+            .post('/projects/submissions')
+            .send(application)
+            .end((err, res) => {
+                res.body.should.have.status(500);
+                done()
+
+            })
+    })
+})
+describe('/POST', () => {
+    it('it should return status 500 if description is not a string', (done) => {
+        let application = { name: "Annette", title: "Project completion", description: 132, postcode: '2000' };
+        chai.request(server)
+            .post('/projects/submissions')
+            .send(application)
+            .end((err, res) => {
+                res.body.should.have.status(500);
+                done()
+
+            })
+    })
+})
+
+
+describe('/GET approved projects', () => {
+    it("should return all pending projects", (done) => {
+        chai.request(server)
+            .get('/projects/pending')
+            .end((err, res) => {
+                res.should.have.status(200)
+                res.body.should.be.a('array')
+                done()
+            })
+    })
+})
+
+describe('/GET projects', () => {
+    it("should return all declined projects", (done) => {
+        chai.request(server)
+            .get('/projects/declined')
+            .end((err, res) => {
+                res.should.have.status(200)
+                res.body.should.be.a('array')
+                done()
+            })
+    })
+})
+describe('/POST vote', () => {
+    it("should return all status 201", (done) => {
+        let project = {
+            id: "e7d09d3a-7e20-4d6c-b2d1-592484012bd0",
+            timeStamp: "2020-07-21T05:54:",
+            status: "approved",
+            voteCount: 0,
+            name: "Peter Holman",
+            descirption: "To rebuild stairs for a church",
+            postcode: "2204"
+        }
+        chai.request(server)
+            .post('/projects/approved/vote')
+            .send(project)
+            .end((err, res) => {
+                res.should.have.status(200)
+                done()
+            })
+    })
+})
