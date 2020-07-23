@@ -296,7 +296,7 @@ describe('/POST Approve', () => {
             })
     })
 })
-describe('/POST vote', () => {
+describe('/POST Decline', () => {
     it("should return status 500 if project is arleady declined", (done) => {
         let id = {
             id: "e7d09d3a-7e20-4d6c-b2d1-592484012bd0"

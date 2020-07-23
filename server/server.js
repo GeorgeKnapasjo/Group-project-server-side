@@ -71,7 +71,8 @@ const chaiHttp = require('chai-http');
                 let searchTerm = req.body.search.toLowerCase()
                 let project = await storage.valuesWithKeyMatch(/project-/);
                 let filteredResults = project.filter(project => Object.keys(project).some(key => project[key].toString().toLowerCase().includes(searchTerm)))
-                res.json({ status: 200, data: filteredResults })
+                let result  = filteredResults.filter(p => p.status == "approved")
+                res.json({ status: 200, data: result })
             }
             else {
                 res.json({ status: 500, message: error.message });
