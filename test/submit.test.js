@@ -254,7 +254,7 @@ describe('/POST vote', () => {
             })
     })
 })
-describe('/POST vote', () => {
+describe('/POST search', () => {
     it("should return status 200", (done) => {
         let search = {
             search: "2204"
@@ -264,11 +264,12 @@ describe('/POST vote', () => {
             .send(search)
             .end((err, res) => {
                 res.should.have.status(200)
+                res.body.should.be.a('array')
                 done()
             })
     })
 })
-describe('/POST vote', () => {
+describe('/POST search', () => {
     it("should return status 500 if search is empty", (done) => {
         let search = {
             search: ""
@@ -310,5 +311,6 @@ describe('/POST Decline', () => {
             })
     })
 })
+
 
 
