@@ -43,7 +43,7 @@ const chaiHttp = require('chai-http');
                 // project ={...req.body}
                 project = { id: uuidv4(), timeStamp: new Date().toISOString().slice(0, 17), status: "pending", voteCount: 0, ...req.body };
                 await storage.setItem(`project-${project.id}`, project);
-                res.json({ satus: 200, data: project });
+                res.json(project);
             }
             else {
                 // throw new Error('Invalid details entered')
@@ -66,7 +66,6 @@ const chaiHttp = require('chai-http');
     server.post('/projects/search', async (req, res) => {
 
         try {
-            let searchTerm;
             if (req.body.search != "") {
                 let searchTerm = req.body.search.toLowerCase()
                 let project = await storage.valuesWithKeyMatch(/project-/);
