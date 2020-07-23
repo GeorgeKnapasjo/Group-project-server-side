@@ -169,6 +169,46 @@ describe('/POST', () => {
             })
     })
 })
+describe('/POST', () => {
+    it('it should return status 500 if title is more than 50 characters', (done) => {
+        let application = { name: "Annette", title: "Lorem ipsum dolor sit amet, consectetuer adipiscing", description: "Description goes here", postcode: '2000' };
+        chai.request(server)
+            .post('/projects/submissions')
+            .send(application)
+            .end((err, res) => {
+                res.body.should.have.status(500);
+                done()
+
+            })
+    })
+})
+describe('/POST', () => {
+    it('it should return status 500 if name is more than 50 characters', (done) => {
+        let application = { name: "Lorem ipsum dolor sit amet, consectetuer adipiscing", title: "Title", description: "Description goes here", postcode: '2000' };
+        chai.request(server)
+            .post('/projects/submissions')
+            .send(application)
+            .end((err, res) => {
+                res.body.should.have.status(500);
+                done()
+
+            })
+    })
+})
+describe('/POST', () => {
+    it('it should return status 500 if description is more than 300 characters', (done) => {
+        let application = { name: "Annette", title: "Project completion", description: '    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec p', postcode: '2000' };
+        chai.request(server)
+            .post('/projects/submissions')
+            .send(application)
+            .end((err, res) => {
+                res.body.should.have.status(500);
+                done()
+
+            })
+    })
+})
+
 
 
 describe('/GET approved projects', () => {
@@ -195,7 +235,7 @@ describe('/GET projects', () => {
     })
 })
 describe('/POST vote', () => {
-    it("should return all status 201", (done) => {
+    it("should return status 201", (done) => {
         let project = {
             id: "e7d09d3a-7e20-4d6c-b2d1-592484012bd0",
             timeStamp: "2020-07-21T05:54:",
@@ -214,3 +254,33 @@ describe('/POST vote', () => {
             })
     })
 })
+describe('/POST vote', () => {
+    it("should return status 200", (done) => {
+        let search = {
+            search: "2204"
+        }
+        chai.request(server)
+            .post('/projects/search')
+            .send(search)
+            .end((err, res) => {
+                res.should.have.status(200)
+                done()
+            })
+    })
+})
+describe('/POST vote', () => {
+    it("should return status 500 if search is empty", (done) => {
+        let search = {
+            search: ""
+        }
+        chai.request(server)
+            .post('/projects/search')
+            .send(search)
+            .end((err, res) => {
+                res.should.have.status(200)
+                done()
+            })
+    })
+})
+
+
