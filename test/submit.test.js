@@ -277,7 +277,35 @@ describe('/POST vote', () => {
             .post('/projects/search')
             .send(search)
             .end((err, res) => {
-                res.should.have.status(200)
+                res.body.should.have.status(500)
+                done()
+            })
+    })
+})
+describe('/POST Approve', () => {
+    it("should return status 500 if project is already approved", (done) => {
+        let id = {
+            id: "535705e2-1264-48a9-93a5-0b5817697d95"
+        }
+        chai.request(server)
+            .post('/projects/approve')
+            .send(id)
+            .end((err, res) => {
+                res.body.should.have.status(500)
+                done()
+            })
+    })
+})
+describe('/POST vote', () => {
+    it("should return status 500 if project is arleady declined", (done) => {
+        let id = {
+            id: "e7d09d3a-7e20-4d6c-b2d1-592484012bd0"
+        }
+        chai.request(server)
+            .post('/projects/decline')
+            .send(id)
+            .end((err, res) => {
+                res.body.should.have.status(500)
                 done()
             })
     })
