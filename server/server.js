@@ -38,12 +38,21 @@ const chaiHttp = require('chai-http');
     //post handler for project submissions
     server.post('/projects/submissions', async (req, res) => {
         try {
-            let project;
-            if (!isNaN(req.body.postcode) && (req.body.title.length <= 50) && (req.body.description.length <= 300) && (req.body.name.length <= 50) && (req.body.postcode > 1999) && (req.body.title != "") && (typeof req.body.name === "string") && (req.body.postcode < 3000) && (req.body.name != "") && (req.body.description != "") && (typeof req.body.name === "string") && (typeof req.body.description === "stirng")) {
+            let project={
+                id: uuidv4(),
+                name: req.body.name,
+                postcode: Number(req.body.postcode),
+                description: req.body.description,
+                title: req.body.title,
+                status: "pending",
+                timeStamp: new Date().toISOString().slice(0, 17),
+                voteCount: 0
+            }
+            if (!isNaN(req.body.postcode) && (req.body.title.length <= 50) && (req.body.description.length <= 300) && (req.body.name.length <= 50) && (req.body.postcode > 1999) && (req.body.title != "") && (typeof req.body.name === "string") && (req.body.postcode < 3000) && (req.body.name != "") && (req.body.description != "") && (typeof req.body.name === "string") && (typeof req.body.description === "string")) {
                 // project ={...req.body}
-                project = { id: uuidv4(), timeStamp: new Date().toISOString().slice(0, 17), status: "pending", voteCount: 0, ...req.body };
+                // project = { id: uuidv4(), timeStamp: new Date().toISOString().slice(0, 17), status: "pending", voteCount: 0, ...req.body };
                 await storage.setItem(`project-${project.id}`, project);
-                res.json(project);
+                res.json({status: 200, data:project});
             }
             else {
                 // throw new Error('Invalid details entered')
@@ -118,8 +127,8 @@ const chaiHttp = require('chai-http');
     })
 
 
-    server.listen(4001, () => {
-        console.log('The server is listening on port 4000 http://localhost:4000');
+    server.listen(4000, () => {
+        console.log('The server is listening on port 4001 http://localhost:4000');
     });
 })();
 
