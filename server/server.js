@@ -35,11 +35,18 @@ const server = express();
 
 
     //gets all declined projects
+    // server.get('/projects/declined', async (req, res) => {
+    //     let projects = await storage.valuesWithKeyMatch(/project-/);
+    //     let filteredResults = projects.filter(projects => Object.keys(projects).some(key => projects[key].toString().toLowerCase().includes("declined")))
+    //     res.json(filteredResults)
+    // })
     server.get('/projects/declined', async (req, res) => {
         let projects = await storage.valuesWithKeyMatch(/project-/);
-        let filteredResults = projects.filter(projects => Object.keys(projects).some(key => projects[key].toString().toLowerCase().includes("declined")))
-        res.json(filteredResults)
+        let filteredResults = projects.filter(project => project.status == "declined")
+        res.status(200).json(filteredResults)
     })
+
+
     //post handler for project submissions
     server.post('/projects/submissions', async (req, res) => {
         try {
@@ -120,7 +127,7 @@ const server = express();
             if (project.status != "decline") {
                 project.status = "decline"
                 await storage.updateItem(`project-${project.id}`, project)
-                res.json(project)
+                res.json({ status: 200, data: project });
             } else {
                 res.json({ status: 500, message: error.message });
 
@@ -131,7 +138,7 @@ const server = express();
     })
 
 
-    server.listen(4001, () => {
+    server.listen(4000, () => {
         console.log('The server is listening on port 4000 http://localhost:4000');
     });
 })();
