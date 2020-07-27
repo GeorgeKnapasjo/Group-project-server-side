@@ -16,17 +16,12 @@ const server = express();
     //gets all approved projects
     server.get('/projects/approved', async (req, res) => {
         let projects = await storage.valuesWithKeyMatch(/project-/);
-        let filteredResults = projects.filter(projects => Object.keys(projects).some(key => projects[key].toString().toLowerCase().includes("approved")))
-        res.json(filteredResults)
+        let filteredResults = projects.filter(project => project.status == "approved")
+        res.status(200).json(filteredResults)
     })
 
     
-    //gets all pending projects
-    // server.get('/projects/pending', async (req, res) => {
-    //     let projects = await storage.valuesWithKeyMatch(/project-/);
-    //     let filteredResults = projects.filter(projects => Object.keys(projects).some(key => projects[key].toString().toLowerCase().includes("pending")))
-    //     res.json(filteredResults)
-    // })
+    
     server.get('/projects/pending', async (req, res) => {
         let projects = await storage.valuesWithKeyMatch(/project-/);
         let filteredResults = projects.filter(project => project.status == "pending")
@@ -34,12 +29,7 @@ const server = express();
     })
 
 
-    //gets all declined projects
-    // server.get('/projects/declined', async (req, res) => {
-    //     let projects = await storage.valuesWithKeyMatch(/project-/);
-    //     let filteredResults = projects.filter(projects => Object.keys(projects).some(key => projects[key].toString().toLowerCase().includes("declined")))
-    //     res.json(filteredResults)
-    // })
+    
     server.get('/projects/declined', async (req, res) => {
         let projects = await storage.valuesWithKeyMatch(/project-/);
         let filteredResults = projects.filter(project => project.status == "declined")
