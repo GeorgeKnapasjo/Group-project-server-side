@@ -48,6 +48,7 @@ const server = express();
 
 
     //post handler for project submissions
+    
     server.post('/projects/submissions', async (req, res) => {
         try {
             let project = {
@@ -60,22 +61,61 @@ const server = express();
                 timeStamp: new Date().toISOString().slice(0, 17),
                 voteCount: 0
             }
-            if (!isNaN(project.postcode) && (project.title.length <= 50) && (project.description.length <= 300) && (project.name.length <= 50) && (project.postcode > 1999) && (project.title != "") && (typeof project.name === "string") && (project.postcode < 3000) && (project.name != "") && (project.description != "") && (typeof project.name === "string") && (typeof project.description === "string")) {
-                //project ={...req.body}
-                //project = { id: uuidv4(), timeStamp: new Date().toISOString().slice(0, 17), status: "pending", voteCount: 0, ...req.body };
-                await storage.setItem(`project-${project.id}`, project);
-                res.json({ status: 200, data: project });
+            if (isNaN(project.postcode)) {
+                res.json({status:500, message:"Please enter a valid post code"})
+            }
+             else if(project.title.length > 50) {
+                 res.json({status:500, message:"Title must be below 50 characters"})
+             }
+             else if(project.description.length > 300) {
+                res.json({status:500, message:"Description must be below 300 characters"})
+    
+             }
+             else if (project.name.length > 50) {
+                res.json({status:500, message:"Name must be below 50 characters"})
+                 
+             }
+             else if(project.postcode < 1999 || project.postcode > 3000) {
+                res.json({status:500, message:"Please enter a valid post code"})
+    
+             }
+             else if(project.title == ''){
+                res.json({status:500, message:"Please enter a valid title"})
+             }
+    
+             else if (typeof project.name !== "string"){
+                res.json({status:500, message:"Please enter a valid name"})
+    
+             }
+             else if(project.postcode > 3000){
+                res.json({status:500, message:"Please enter a valid post code"})
+    
+             }
+             else if (project.name == "") {
+                res.json({status:500, message:"Please enter a valid name"})
+             }
+             else if (project.description == "") {
+                res.json({status:500, message:"Please enter a description"})
+             }
+             else if (typeof project.name !== "string") {
+                res.json({status:500, message:"Please enter a valid name"})
+             }
+             else if (typeof project.description !== "string") {
+                res.json({status:500, message:"Please enter a valid description"})
+    
             }
             else {
-                // throw new Error('Invalid details entered')
-                res.json({ status: 500, message: error.message });
-
+                await storage.setItem(`project-${project.id}`, project);
+                res.json({ status: 200, data: project });
             }
         }
         catch (error) {
             res.json({ status: 500, message: error.message });
         };
     });
+    
+
+
     //post handler for votes
     server.put('/projects/approved/vote', async (req, res) => {
         let toVote = req.body.id
@@ -143,4 +183,3 @@ const server = express();
     });
 })();
 
-module.exports = server
