@@ -17,7 +17,7 @@ const server = express();
     server.get('/projects/approved', async (req, res) => {
         let projects = await storage.valuesWithKeyMatch(/project-/);
         let filteredResults = projects.filter(project => project.status == "approved")
-        res.status(200).json(filteredResults)
+        res.json({status:200, data:filteredResults})
     })
 
     
@@ -111,7 +111,8 @@ const server = express();
         let toVote = req.body.id
         let project = await storage.getItem(`project-${toVote}`)
         ++project.voteCount
-        res.json(project.voteCount)
+        await storage.updateItem(`project-${project.id}`, project)
+        res.json({status:200, data:project})
     })
     //post handler for project searches
     server.post('/projects/search', async (req, res) => {
@@ -167,6 +168,11 @@ const server = express();
         };
     })
 
+// server.get('/projects/popular', async (req, res)=>{
+//     let projects = await storage.valuesWithKeyMatch(/project-/)
+//     let sortedProjects=projects.voteCount.sort((a, b) => (b-a))
+//     res.json(sortedProjects)
+// })
 
     server.listen(4000, () => {
         console.log('The server is listening on port 4000 http://localhost:4000');
