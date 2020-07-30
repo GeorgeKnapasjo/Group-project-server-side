@@ -116,15 +116,20 @@ const server = express();
         res.json({ status: 200, data: project })
     })
     //post handler for project searches
-    server.get('/projects/search/:seachTerm', async (req, res) => {
+    server.post('/projects/search', async (req, res) => {
 
         try {
-            if (req.params.search != "") {
-                let searchTerm = req.params.search.toLowerCase()
+            if (req.body.searchTerm != "") {
+                let searchTerm = req.body.searchTerm.toLowerCase()
                 let project = await storage.valuesWithKeyMatch(/project-/);
                 let filteredResults = project.filter(project => Object.keys(project).some(key => project[key].toString().toLowerCase().includes(searchTerm)))
                 let result = filteredResults.filter(p => p.status == "approved")
-                res.json(result)
+                if(result.length == 0){
+                    res.json({status:500, message: 'Error no projects matching that search term'})
+                } else{
+
+                    res.json({status:200, data:result})
+                }
             }
             else {
                 res.json({ status: 200, message: sucessful });
